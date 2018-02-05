@@ -18,12 +18,40 @@ and open the template in the editor.
 <html>
   <head>
     <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="style.css">
     <script src="http://threejs.org/build/three.min.js"></script>
 
   </head>
   <body>
-    <video id="video" width="320" height="240" style="visibility: hidden;">Video stream not available.</video>
-    <canvas id="video_canvas" width="320" height="240"></canvas>
+    <video id="video" class="unifiorm-size " style="visibility: hidden;">Video stream not available.</video>
+    <canvas id="video_canvas" class="unifiorm-size"></canvas>
+    <canvas id="shader_canvas" class="unifiorm-size"></canvas>
+
+<!--GLSL shader start-->
+    <script type="x-shader/x-vertex" id="vertex-shader">
+//vertex
+precision highp float;
+attribute vec2 position;
+
+void main() {
+  gl_Position = vec4(position, 0.0, 1.0);
+  gl_PointSize = 128.0;
+}
+  </script>
+    <script type="x-shader/x-fragment" id="fragment-shader">
+//fragment
+precision mediump float;
+void main() {
+  vec2 fragmentPosition = 2.0*gl_PointCoord - 1.0;
+  float distance = length(fragmentPosition);
+  float distanceSqrd = distance * distance;
+  gl_FragColor = vec4(
+    0.2/distanceSqrd,
+    0.1/distanceSqrd,
+    0.0, 1.0 );
+}
+  </script>
+    <!--GLSL shader end-->
     <script src="basic.js" charset="utf-8"></script>
     </body>
 </html>
