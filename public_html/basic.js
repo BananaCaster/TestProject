@@ -8,6 +8,7 @@ var videoTexture;
 //var video, video_canvas;// for video
 var gl, program; // for glsl
 
+
 const video = document.getElementById('video');
 const video_canvas = document.getElementById('video_canvas');
 const canvas = document.querySelector('.photo');
