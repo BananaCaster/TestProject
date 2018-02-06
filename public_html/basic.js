@@ -1,12 +1,18 @@
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 var scene, camera, renderer;// for three.js
 var videoTexture;
-var video, video_canvas;// for video
+//var video, video_canvas;// for video
 var gl, program; // for glsl
+
+const video = document.getElementById('video');
+const video_canvas = document.getElementById('video_canvas');
+const canvas = document.querySelector('.photo');
+const ctx = video_canvas.getContext('2d');
+
 window.addEventListener("load", setupWebGL, false);// load the glsl at the begining. when linked to video, it may need to process later
 initWebcam();
 init();
@@ -14,8 +20,8 @@ render();
 
 function initWebcam() {
 
-    video = document.getElementById('video');
-    video_canvas = document.getElementById('video_canvas');
+  //  video = document.getElementById('video');
+  //  video_canvas = document.getElementById('video_canvas');
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
             .then(function (stream) {
                 video.srcObject = stream;
@@ -40,10 +46,10 @@ function init() {
 function render() {
 
     requestAnimationFrame(render);
-    canvas_context = video_canvas.getContext('2d');
-    canvas_context.drawImage(video, 0, 0, 320, 240);
-    videoTexture.needsUpdate = true;
-    renderer.render(scene, camera);
+    //canvas_context = video_canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, 320, 240);
+    //videoTexture.needsUpdate = true;
+    //renderer.render(scene, camera);
 
 }
 
@@ -121,6 +127,81 @@ function getRenderingContext() {
     return gl;
 }
 
+// canvas
+
+function paintToCanvas(){
+  const width = video.videoWidth;
+  const height = video.videoHeight;
+
+  video_canvas.width = width;
+  video_canvas.height = height;
+
+ //console.log(width, height);
+  return setInterval(() => {
+    ctx.drawImage(video, 0, 0, width, height);
+
+    //take the pixels out
+    let pixels = ctx.getImageData(0, 0, width, height);
+    //manipulate webcam for single color
+     //pixels = redEffect(pixels);
+    // manipulate webcam for mixed color
+    // pixels = rgbSplit(pixels);
+    //mixed
+    pixels = greenScreen(pixels);
+     //put them back
+     ctx.putImageData(pixels, 0, 0);
+  }, 16);
+
+}
 
 
+//HUE filter for single color
+// function redEffect(pixels){
+//   for(let i=0; i<pixels.data.length; i+=4 ){
+//     pixels.data[i+0] = pixels.data[i+0] + 100;  //red
+//     pixels.data[i+1] = pixels.data[i+1] - 50;  //green
+//     pixels.data[i+2] = pixels.data[i+2] * 0.5;  //blue
+//   }
+//   return pixels;
+// }
+//
+// // HUE filter for mixed color
+// function rgbSplit(pixels){
+//   for(let i=0; i<pixels.data.length; i+=4){
+//     pixels.data[i-150] = pixels.data[i+0]; // red
+//     pixels.data[i+100] = pixels.data[i+1]; //green
+//     pixels.data[i-150] = pixels.data[i+2]; // blue
+//   }
+//   return pixels;
+// }
 
+//HUE shader and slider
+
+function greenScreen(pixels){
+
+  const levels = {};
+
+  document.querySelectorAll('.rgb input').forEach((input) =>{
+    levels[input.name] = input.value;
+  });
+
+  //console.log(levels);
+
+  for(let i=0; i<pixels.data.length; i+=4 ){
+    red = pixels.data[i+0];
+    green = pixels.data[i+1];
+    blue = pixels.data[i+2];
+    alpha = pixels.data[i+3];
+    // if the color is not between rgb
+    if(red >=levels.rmin
+      && green >=levels.gmin
+      && blue >=levels.bmin
+      && red <= levels.rmax
+      && green <= levels.gmax
+      && blue <=levels.bmax){
+        //take it out and transparent
+        pixels.data[i+3] = 0;
+      }
+  }
+  return pixels;
+}

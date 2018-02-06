@@ -23,17 +23,46 @@ and open the template in the editor.
 
   </head>
   <body>
+
+    <div class="rgb">
+      <label for="rmin">Red Min </label>
+        <input type="range" min=0 max=255 name="rmin">
+      <label for="rmax">Red Max</label>
+        <input type="range" min=0 max=255 name= "rmax">
+
+        <br>
+
+      <label for="gmin">Green Min </label>
+        <input type="range" min=0 max=255 name="gmin">
+      <label for="gmax">Green Max</label>
+        <input type="range" min=0 max=255 name="gmax">
+
+        <br>
+
+        <label for="bmin">Blue Min </label>
+          <input type="range" min=0 max=255 name="bmin">
+        <label for="bmax">Blue Max</label>
+          <input type="range" min=0 max=255 name="bmax">
+    </div>
+
     <video id="video" class="unifiorm-size " style="visibility: hidden;">Video stream not available.</video>
     <canvas id="video_canvas" class="unifiorm-size"></canvas>
     <canvas id="shader_canvas" class="unifiorm-size"></canvas>
+    <canvas class = "photo" ><canvas>
 	<audio id="audio1">
 		<source src="sounds/my-audio.mp3" type="audio/mpeg" />
 	</audio>
+
+
+
+
+
 <!--GLSL shader start-->
     <script type="x-shader/x-vertex" id="vertex-shader">
 //vertex
 precision highp float;
 attribute vec2 position;
+
 
 void main() {
   gl_Position = vec4(position, 0.0, 1.0);
@@ -51,6 +80,7 @@ void main() {
     0.2/distanceSqrd,
     0.1/distanceSqrd,
     0.0, 1.0 );
+
 }
   </script>
     <!--GLSL shader end-->
