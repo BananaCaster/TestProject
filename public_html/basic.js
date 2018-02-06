@@ -31,7 +31,10 @@ function init() {
     //scene = new THREE.Scene();
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
-
+	// load and play sound
+	var myAudio1 = document.getElementById("audio1");
+	myAudio1.volumn = 0.3;
+	myAudio1.play();
 }
 
 function render() {
