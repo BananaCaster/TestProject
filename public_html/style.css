@@ -1,7 +1,12 @@
-.unifiorm-size{
-    width : 320 ;
-    height : 240 ;
+/* .unifiorm-size{
+    width : 320;
+    height : 240;
 
+} */
+
+#video_canvas {
+  width: 640px;
+  height: 480px;
 }
 audio {
    display:none;
