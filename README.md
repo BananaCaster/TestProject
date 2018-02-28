@@ -11,6 +11,7 @@ Nearly all of the entire WebGL API is about setting up state for these pairs of 
 Any data you want those functions to have access to must be provided to the GPU. There are 4 ways a shader can receive data.
 
 Attributes and Buffers
+-------------------------------------------------------------------------------------------------------
 
 Buffers are arrays of binary data you upload to the GPU. Usually buffers contain things like positions, normals, texture coordinates, vertex colors, etc although you're free to put anything you want in them.
 
@@ -19,13 +20,18 @@ Attributes are used to specify how to pull data out of your buffers and provide 
 Buffers are not random access. Instead a vertex shaders is executed a specified number of times. Each time it's executed the next value from each specified buffer is pulled out assigned to an attribute.
 
 Uniforms
+-------------------------------------------------------------------------------------------------------
 
 Uniforms are effectively global variables you set before you execute your shader program.
 
 Textures
-
+-------------------------------------------------------------------------------------------------------
 Textures are arrays of data you can randomly access in your shader program. The most common thing to put in a texture is image data but textures are just data and can just as easily contain something other than colors.
 
 Varyings
+-------------------------------------------------------------------------------------------------------
 
 Varyings are a way for a vertex shader to pass data to a fragment shader. Depending on what is being rendered, points, lines, or triangles, the values set on a varying by a vertex shader will be interpolated while executing the fragment shader.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
